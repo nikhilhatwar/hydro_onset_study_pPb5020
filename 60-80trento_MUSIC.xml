@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+
+<jetscape>
+
+  <enableAutomaticTaskListDetermination> true </enableAutomaticTaskListDetermination>
+
+  <vlevel> 1 </vlevel>
+  <nEvents> 3200 </nEvents>
+
+
+  <setReuseHydro> true </setReuseHydro>
+  <nReuseHydro> 40 </nReuseHydro>
+
+
+  <debug> off </debug>
+  <remark> on </remark>
+
+  <Random>
+    <seed>1</seed>
+  </Random>
+
+  <nEvents_printout> 1 </nEvents_printout>
+  <JetScapeWriterFinalStatePartonsAscii> on </JetScapeWriterFinalStatePartonsAscii>
+  <JetScapeWriterFinalStateHadronsAscii> on </JetScapeWriterFinalStateHadronsAscii>
+  <JetScapeWriterHepMC> off </JetScapeWriterHepMC>
+  <JetScapeWriterRootHepMC> off </JetScapeWriterRootHepMC>
+
+  <outputFilename>test_out</outputFilename>
+  <JetScapeWriterAscii> on </JetScapeWriterAscii>
+  <JetScapeWriterAsciiGZ> off </JetScapeWriterAsciiGZ>
+
+
+  <JetScapeWriterQnVectorAscii> off </JetScapeWriterQnVectorAscii>
+  <QnVector_pTmin>0</QnVector_pTmin>
+  <QnVector_pTmax>5</QnVector_pTmax>
+  <QnVector_NpT>50</QnVector_NpT>
+  <QnVector_rapmin>-2.0</QnVector_rapmin>
+  <QnVector_rapmax>2.0</QnVector_rapmax>
+  <QnVector_Nrap>40</QnVector_Nrap>
+  <QnVector_Norder>2</QnVector_Norder>
+
+  <write_pthat> 0 </write_pthat>
+
+
+    <!-- Inital State Module  -->
+    <IS>
+        <grid_max_x> 14 </grid_max_x>
+        <grid_max_y> 14 </grid_max_y>
+        <grid_max_z> 0.0 </grid_max_z>
+        <!--  <grid_step_x> 0.2 </grid_step_x>
+        <grid_step_y> 0.2 </grid_step_y> -->
+        <grid_step_x> 0.2 </grid_step_x>
+        <grid_step_y> 0.2 </grid_step_y>
+        <grid_step_z> 0.0 </grid_step_z>
+
+
+        <Trento>
+          <PhysicsInputs  projectile='p'
+                  target='Pb'
+                  sqrts='5020'
+                  cross-section='6.7'
+                  normalization='37'>
+          </PhysicsInputs>
+          <CutInputs
+                centrality-low='60'
+                centrality-high='80'>
+          </CutInputs>
+          <TransInputs  reduced-thickness='0.063'
+                  fluctuation="1.05"
+                  nucleon-width="1.12"
+                  nucleon-min-dist="1.4">
+          </TransInputs>
+          <LongiInputs  mean-coeff="1.0"
+                  std-coeff="3.0"
+                  skew-coeff="0.0"
+                  skew-type="1"
+                  jacobian="0.8">
+          </LongiInputs>
+        </Trento>
+    </IS>
+
+
+
+
+
+
+  <Preequilibrium>
+    <!-- starting long. proper time for Preequilibrium dynamics -->
+    <tau0>0.0</tau0>
+    <!-- starting long. proper time for Preequilibrium dynamics outuput for hard probes -->
+    <tauj>0.1</tauj>
+    <!-- switching long. proper time from Preequilibrium dynamics to Hydrodynamics (Landau Matching) -->
+    <taus>1.0</taus>
+    <evolutionInMemory>1</evolutionInMemory>
+
+    <!-- Individual Preequilibrium Dynamics models  -->
+    <FreestreamMilne>
+      <name>FreestreamMilne</name>
+      <freestream_input_file>./1INPUT/freestream_input</freestream_input_file>
+      <!-- number of timesteps for the evolution, this defines the dtau = (taus - tauj)  / ntau -->
+      <!-- in the case of <evolutionInMemory>1</evolutionInMemory> this will also set the time step for the hydro, make sure that it is small enough -->
+      <ntau>24</ntau>
+    </FreestreamMilne>
+
+  </Preequilibrium>
+
+
+
+
+
+    <!-- Hydro  Module  -->
+    <Hydro>
+        <MUSIC>
+            <beastMode>0</beastMode>
+            <MUSIC_input_file>./1INPUT/music_input</MUSIC_input_file>
+            <output_evolution_to_file>1</output_evolution_to_file>
+            <output_evolution_to_memory>1</output_evolution_to_memory>
+            <surface_in_memory>1</surface_in_memory>
+            <Initial_time_tau_0>1.0</Initial_time_tau_0>
+            <T_dependent_Shear_to_S_ratio>1</T_dependent_Shear_to_S_ratio>
+            <eta_over_s_T_kink_in_GeV>0.223</eta_over_s_T_kink_in_GeV>
+            <eta_over_s_low_T_slope_in_GeV>-0.776</eta_over_s_low_T_slope_in_GeV>
+            <eta_over_s_high_T_slope_in_GeV>0.37</eta_over_s_high_T_slope_in_GeV>
+            <eta_over_s_at_kink>0.096</eta_over_s_at_kink>
+            <temperature_dependent_bulk_viscosity>1</temperature_dependent_bulk_viscosity>
+            <zeta_over_s_max>0.133</zeta_over_s_max>
+            <zeta_over_s_T_peak_in_GeV>0.12</zeta_over_s_T_peak_in_GeV>
+            <zeta_over_s_width_in_GeV>0.072</zeta_over_s_width_in_GeV>
+            <zeta_over_s_lambda_asymm>-0.122</zeta_over_s_lambda_asymm>
+            <freezeout_temperature>0.150</freezeout_temperature>
+        </MUSIC>
+    </Hydro>
+
+
+
+  <!-- Particlization Module  -->
+  <SoftParticlization>
+    <!-- iSpectraSampler -->
+    <iSS>
+      <!-- read in file type  -->
+      <!-- hydro_mode == 0 read in surface file from VISHNew -->
+      <!-- hydro_mode == 1 read in surface file from MUSIC (2+1)D -->
+      <!-- hydro_mode == 2 read in surface file from MUSIC (3+1)D -->
+      <hydro_mode>1</hydro_mode>
+
+      <!-- file path for the default input file  -->
+         <iSS_input_file>./1INPUT/iSS_parameters.dat</iSS_input_file>
+      <!-- directory path where the hydro surface is stored  -->
+      <iSS_working_path>.</iSS_working_path>
+      <!-- file path for the default table files  -->
+      <iSS_table_path>../external_packages/iSS/iSS_tables</iSS_table_path>
+      <!-- file path for the default particle table files  -->
+      <iSS_particle_table_path>../external_packages/iSS/iSS_tables</iSS_particle_table_path>
+      <!-- hadron species list  0: PDG 2005; 1: UrQMD; 2: SMASH -->
+      <afterburner_type>2</afterburner_type>
+
+      <include_deltaf_shear>1</include_deltaf_shear>
+      <include_deltaf_bulk>1</include_deltaf_bulk>
+      <deltaf_type>20</deltaf_type>
+      <number_of_repeated_sampling>2000</number_of_repeated_sampling>
+      <Perform_resonance_decays>1</Perform_resonance_decays>
+    </iSS>
+  </SoftParticlization>
+
+
+
+
+
+
+  <!-- Hadronic Afterburner  -->
+  <Afterburner>
+    <!-- fragmentation hadrons in the afterburner only possible with hybrid hadronization-->
+    <include_fragmentation_hadrons>0</include_fragmentation_hadrons>
+    <!-- only the afterburner hadrons are written to a file -->
+    <!-- if fragmentation hadrons are not included in the afterburner they are also written  -->
+    <output_only_final_state_hadrons>1</output_only_final_state_hadrons>
+    <!-- SMASH -->
+    <SMASH>
+      <name>SMASH</name>
+      <SMASH_config_file>../external_packages/smash/smash_config.yaml</SMASH_config_file>
+      <SMASH_particles_file>../external_packages/smash/smash_code/input/particles.txt</SMASH_particles_file>
+      <SMASH_decaymodes_file>../external_packages/smash/smash_code/input/decaymodes.txt</SMASH_decaymodes_file>
+      <!-- time in fm/c in the computational frame, when the simulation shoud be ended -->
+      <end_time>1000.0</end_time>
+      <!-- 0 - run the full afterburner, 1 - only decay the resonances without even propagation -->
+      <only_decays>1</only_decays>
+    </SMASH>
+  </Afterburner>
+
+
+
+
+
+
+
+
+
+
+
+</jetscape>
