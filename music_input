@@ -115,18 +115,6 @@ Include_Bulk_Visc_Yes_1_No_0 1     # include bulk viscous effect
 Include_second_order_terms 1       # include second order non-linear coupling terms
 shear_relax_time_factor 3
 #
-outputEvolutionData 1
-output_movie_flag 1
-output_outofequilibriumsize 1
-include_vorticity_terms 0 
-output_vorticity 0
-Include_Rhob_Yes_1_No_0 1
-turn_on_rhob 1 
-output_hydro_params_header 1
-output_hydro_debug_info 1
-output_initial_density_profiles 1
-surface_in_memory 1
-
 #
 # switches to output evolution information
 store_hydro_info_in_memory 1       # flag to store hydro info in memory
